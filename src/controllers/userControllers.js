@@ -2,7 +2,7 @@ const database = require("../../database");
 
 const getUsers = (req, res) => {
   database
-    .query("select * from users") 
+    .query("select * from users")
     .then((result) => {
       const [users] = result;
       console.log(users);
@@ -32,7 +32,24 @@ const getUserById = (req, res) => {
     });
 };
 
+const postUser = (req, res) => {
+  const { firstname, lastname, email, city, language } = req.body;
+  database
+    .query(
+      "INSERT INTO users(firstName, lastName, email, city, language) VALUES (?, ?, ?, ?, ?)",
+      [firstname, lastname, email, city, language]
+    )
+    .then(([result]) => {
+      res.status(201).send({ id: result.insertId });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+};
+
 module.exports = {
   getUsers,
   getUserById,
+  postUser,
 };
