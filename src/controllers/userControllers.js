@@ -5,7 +5,6 @@ const getUsers = (req, res) => {
     .query("select * from users")
     .then((result) => {
       const [users] = result;
-      console.log(users);
       res.status(200).json(users);
     })
     .catch((err) => {
