@@ -184,3 +184,47 @@ describe("PUT /api/users/:id", () => {
     expect(response.status).toEqual(404);
   });
 });
+
+
+// TEST LA ROUTE DELETE POUR USER
+describe("DELETE /api/users/:id", () => {
+  it("should delete user", async () => {
+    const newUser = {
+      firstname: "Adam",
+      lastname: "Daamn",
+      email: `${crypto.randomUUID()}@example.com`,
+      city: "Lille",
+      language: "Espagnol",
+    };
+
+    const [result] = await database.query(
+      "INSERT INTO users(firstname, lastname, email, city, language) VALUES (?, ?, ?, ?, ?)",
+      [
+        newUser.firstname,
+        newUser.lastname,
+        newUser.email,
+        newUser.city,
+        newUser.language,
+      ]
+    );
+
+    const id = result.insertId;
+
+    const response = await request(app).delete(`/api/users/${id}`);
+
+    expect(response.status).toEqual(204);
+
+    const [deleteResult] = await database.query(
+      "SELECT * FROM users WHERE id=?",
+      id
+    );
+
+    expect(deleteResult.length).toEqual(0);
+  });
+
+  it("should return an error for non-existing user", async () => {
+    const response = await request(app).delete("/api/users/999");
+
+    expect(response.status).toEqual(404);
+  });
+});

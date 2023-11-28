@@ -184,3 +184,46 @@ describe("PUT /api/movies/:id", () => {
     expect(response.status).toEqual(404);
   });
 });
+
+// TEST LA ROUTE DELETE POUR MOVIE
+describe("DELETE /api/movies/:id", () => {
+  it("should delete movie", async () => {
+    const newMovie = {
+      title: "Ecrire pour exister",
+      director: "Richard LaGravenese",
+      year: "2007",
+      color: true,
+      duration: 123,
+    };
+
+    const [result] = await database.query(
+      "INSERT INTO movies(title, director, year, color, duration) VALUES (?, ?, ?, ?, ?)",
+      [
+        newMovie.title,
+        newMovie.director,
+        newMovie.year,
+        newMovie.color,
+        newMovie.duration,
+      ]
+    );
+
+    const id = result.insertId;
+
+    const response = await request(app).delete(`/api/movies/${id}`);
+
+    expect(response.status).toEqual(204);
+
+    const [deleteResult] = await database.query(
+      "SELECT * FROM movies WHERE id=?",
+      id
+    );
+
+    expect(deleteResult.length).toEqual(0);
+  });
+
+  it("should return an error for non-existing movie", async () => {
+    const response = await request(app).delete("/api/movies/999");
+
+    expect(response.status).toEqual(404);
+  });
+});
