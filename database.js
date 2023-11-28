@@ -13,12 +13,22 @@ const database = mysql.createPool({
 database
   .getConnection()
   .then(() => {
-    console.log("Connection OK");
+    console.log(`Database is connected on ${process.env.DB_PORT}`);
   })
   .catch((err) => {
     console.error(err);
   });
 
+// Tu peux aussi l'écrire comme ça, .then est une méthode de l'objet database qui est lui même instancié de la classe Pool
+// ce qu'il y a entre les () jaune de .then est une fonction de callback anonyme car elle ne prend pas de nom
+// database
+//   .getConnection()
+//   .then(function() {
+//     console.log("Connection OK");
+// })
+// .catch(function(err) {
+//   console.error(err);
+// })
 
 
 module.exports = database;

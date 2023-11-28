@@ -34,7 +34,7 @@ describe("GET /api/movies", () => {
     );
 
     const [movieInDatabase] = result;
-    
+
     expect(movieInDatabase).toHaveProperty("id");
     expect(movieInDatabase).toHaveProperty("title");
     expect(typeof movieInDatabase.title).toBe("string");
@@ -50,7 +50,6 @@ describe("GET /api/movies", () => {
 
     expect(movieInDatabase).toHaveProperty("duration");
     expect(typeof movieInDatabase.duration).toBe("number");
-
   });
 
   it("should return an error", async () => {
