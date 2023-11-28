@@ -86,7 +86,7 @@ describe("POST /api/users", () => {
       .post("/api/users")
       .send(userWithMissingProps);
 
-    expect(response.status).toEqual(500);
+    expect(response.status).toEqual(422);
   });
 });
 
@@ -98,7 +98,7 @@ describe("PUT /api/users/:id", () => {
     const newUser = {
       firstname: "Fred",
       lastname: "Druet",
-      email: "fred.druet@example.com",
+      email: `${crypto.randomUUID()}@wild.co`,
       city: "Bordeaux",
       language: "Francais",
     };
@@ -119,7 +119,7 @@ describe("PUT /api/users/:id", () => {
     const updatedUser = {
       firstname: "Raph",
       lastname: "Bard",
-      email: "raph.bard@example.com",
+      email: `${crypto.randomUUID()}@wild.co`,
       city: "Bordeaux",
       language: "Francais",
     };
@@ -167,15 +167,15 @@ describe("PUT /api/users/:id", () => {
       .put(`/api/users/1`)
       .send(userWithMissingProps);
 
-    expect(response.status).toEqual(500);
+    expect(response.status).toEqual(422);
   });
 
   it("should return no user", async () => {
     const newUser = {
       firstname: "Fred",
       lastname: "Druet",
-      email: "fred.druet@example.com",
-      city: "Bordeaux",
+      email: `${crypto.randomUUID()}@wild.co`,
+      city: "Paris",
       language: "Francais",
     };
 
